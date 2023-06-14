@@ -16,11 +16,12 @@ class HomeView extends StatelessWidget {
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             ClipOval(
               child: Container(
-                  width: 150,
-                  height: 150,
+                  width: 130,
+                  height: 130,
                   alignment: Alignment.center,
                   child: Image.asset("assets/images/logo.png")),
             ),
+            
             SizedBox(
               width: MediaQuery.of(context).size.width,
               child: Row(
@@ -29,7 +30,7 @@ class HomeView extends StatelessWidget {
                   Expanded(
                     flex: 1,
                     child: SizedBox(
-                      height: 57,
+                      height: 56,
                       child: DropdownButton(
                           underline: Container(
                             height: 1,

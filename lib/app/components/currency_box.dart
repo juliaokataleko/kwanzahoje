@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:kwanzahoje/app/models/currency_model.dart';
 
 class CurrencyBox extends StatelessWidget {
-  const CurrencyBox({super.key});
+
+  final TextEditingController controller;
+  final List<CurrencyModel> items;
+  final void Function(CurrencyModel? model)? onChanged;
+  final CurrencyModel selectedItem;
+
+  const CurrencyBox(
+      {super.key,
+      required this.controller,
+      required this.items,
+      required this.onChanged, 
+      required this.selectedItem});
 
   @override
   Widget build(BuildContext context) {
@@ -13,56 +25,37 @@ class CurrencyBox extends StatelessWidget {
             flex: 1,
             child: SizedBox(
               height: 57,
-              child: DropdownButton(
-                iconEnabledColor: Colors.red,
+              child: DropdownButton<CurrencyModel>(
+                  iconEnabledColor: Colors.red,
                   underline: Container(
                     height: 1,
                     color: Colors.red,
                   ),
                   isExpanded: true,
-                  items: [
-                    DropdownMenuItem<String>(
-                      value: "Kwanza",
-                      child: Text("Kwanza"),
-                    ),
-                    DropdownMenuItem<String>(
-                      value: "Real",
-                      child: Text("Real"),
-                    ),
-                    DropdownMenuItem<String>(
-                      value: "Dolar",
-                      child: Text("Dólar"),
-                    ),
-                    DropdownMenuItem<String>(
-                      value: "Euro",
-                      child: Text("Euro"),
-                    ),
-                    DropdownMenuItem<String>(
-                      value: "Bitcoin",
-                      child: Text("Bitcoin"),
-                    )
-                  ],
-                  onChanged: (value) {
-                    if (value != null) {
-                    }                              
-    
-                  }),
+                  value: selectedItem,
+                  items: items
+                      .map((e) =>
+                          DropdownMenuItem(value: e, child: Text(e.name)))
+                      .toList(),
+                  onChanged: onChanged),
             ),
           ),
           SizedBox(
             width: 10,
           ),
-          const Expanded(
+          Expanded(
             flex: 2,
             child: TextField(
+              controller: controller,
               decoration: InputDecoration(
                 enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red)
-                ),
+                    borderSide: BorderSide(color: Colors.red)),
                 focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red)
-                ),
+                    borderSide: BorderSide(color: Colors.red)),
               ),
+              // onChanged: (value) {
+              //   print(value);
+              // },
             ),
           )
         ],

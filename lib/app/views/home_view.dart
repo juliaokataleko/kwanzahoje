@@ -1,13 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:kwanzahoje/app/components/currency_box.dart';
+import 'package:kwanzahoje/app/controllers/home_controller.dart';
 
-class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+class HomeView extends StatefulWidget {
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  final TextEditingController toText = TextEditingController();
+  final TextEditingController fromText = TextEditingController();
+
+  late HomeController homeController;
+
+  @override
+  void initState() {
+    // implement initState
+    super.initState();
+
+    homeController = HomeController(toText, fromText);
+  }
 
   @override
   Widget build(BuildContext context) {
-    String value1 = "Kwanza";
-
     return Scaffold(
       body: SingleChildScrollView(
         child: SizedBox(
@@ -15,7 +30,8 @@ class HomeView extends StatelessWidget {
           height: MediaQuery.of(context).size.height,
           child: Padding(
             padding: const EdgeInsets.all(24.0),
-            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               ClipOval(
                 child: Container(
                     width: 130,
@@ -24,9 +40,31 @@ class HomeView extends StatelessWidget {
                     child: Image.asset("assets/images/logo.png")),
               ),
               SizedBox(height: 50),
-              CurrencyBox(),
+              CurrencyBox(
+                controller: toText,
+                items: homeController.currencies,
+                onChanged: (model) {
+                  setState(() {
+                    if (model != null) {
+                      homeController.toCurrency = model;
+                    }
+                  });
+                },
+                selectedItem: homeController.toCurrency,
+              ),
               SizedBox(height: 20),
-              CurrencyBox(),
+              CurrencyBox(
+                selectedItem: homeController.fromCurrency,
+                controller: fromText,
+                items: homeController.currencies,
+                onChanged: (model) {
+                  setState(() {
+                    if (model != null) {
+                      homeController.fromCurrency = model;
+                    }
+                  });
+                },                
+              ),
               SizedBox(height: 50),
               SizedBox(
                 width: double.infinity,
@@ -34,7 +72,9 @@ class HomeView extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
                         foregroundColor: Colors.white),
-                    onPressed: () {},
+                    onPressed: () {
+                      homeController.convert();
+                    },
                     child: Text("Converter")),
               )
             ]),
